@@ -85,3 +85,26 @@ bool checkTie(char *spaces) {
     std::cout << "IT'S A TIE!\n";
     return true;
 }
+bool checkWinner(char *spaces, char player, char computer) {
+    int winPatterns[8][3] = {
+        {0, 1, 2}, {3, 4, 5}, {6, 7, 8},  // Rows
+        {0, 3, 6}, {1, 4, 7}, {2, 5, 8},  // Columns
+        {0, 4, 8}, {2, 4, 6}              // Diagonals
+    };
+
+    for (auto &pattern : winPatterns) {
+        if (spaces[pattern[0]] != ' ' &&
+            spaces[pattern[0]] == spaces[pattern[1]] &&
+            spaces[pattern[1]] == spaces[pattern[2]]) {
+            
+            if (spaces[pattern[0]] == player) {
+                std::cout << "YOU WIN!\n";
+            } else {
+                std::cout << "YOU LOSE!\n";
+            }
+            return true;
+        }
+    }
+
+    return false;
+}
