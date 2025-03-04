@@ -1,29 +1,28 @@
 #include<iostream>
-#include <ctime>
 
 void drawBoard(char *spaces);
 void playerMove(char *spaces, char player);
-void computerMove(char *spaces, char computer);
-bool checkWinner(char *spaces, char player, char computer);
+bool checkWinner(char *spaces, char player1, char player2);
 bool checkTie(char *spaces);
 
 int main() {
-    srand(time(0)); // Seed random generator once
     char spaces[9] = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
-    char player = 'X';
-    char computer = 'O';
+    char player1 = 'X';
+    char player2 = 'O';
     bool running = true;
 
     drawBoard(spaces);
 
     while (running) {
-        playerMove(spaces, player);
+        std::cout << "Player 1's turn (X)\n";
+        playerMove(spaces, player1);
         drawBoard(spaces);
-        if (checkWinner(spaces, player, computer) || checkTie(spaces)) break;
+        if (checkWinner(spaces, player1, player2) || checkTie(spaces)) break;
 
-        computerMove(spaces, computer);
+        std::cout << "Player 2's turn (O)\n";
+        playerMove(spaces, player2);
         drawBoard(spaces);
-        if (checkWinner(spaces, player, computer) || checkTie(spaces)) break;
+        if (checkWinner(spaces, player1, player2) || checkTie(spaces)) break;
     }
 
     std::cout << "Thanks for playing!\n";
@@ -67,17 +66,6 @@ void playerMove(char *spaces, char player) {
     }
 }
 
-void computerMove(char *spaces, char computer) {
-    int number;
-    while (true) {
-        number = rand() % 9;
-        if (spaces[number] == ' ') {
-            spaces[number] = computer;
-            break;
-        }
-    }
-}
-
 bool checkTie(char *spaces) {
     for (int i = 0; i < 9; i++) {
         if (spaces[i] == ' ') return false;
@@ -85,7 +73,8 @@ bool checkTie(char *spaces) {
     std::cout << "IT'S A TIE!\n";
     return true;
 }
-bool checkWinner(char *spaces, char player, char computer) {
+
+bool checkWinner(char *spaces, char player1, char player2) {
     int winPatterns[8][3] = {
         {0, 1, 2}, {3, 4, 5}, {6, 7, 8},  // Rows
         {0, 3, 6}, {1, 4, 7}, {2, 5, 8},  // Columns
@@ -97,14 +86,13 @@ bool checkWinner(char *spaces, char player, char computer) {
             spaces[pattern[0]] == spaces[pattern[1]] &&
             spaces[pattern[1]] == spaces[pattern[2]]) {
             
-            if (spaces[pattern[0]] == player) {
-                std::cout << "YOU WIN!\n";
+            if (spaces[pattern[0]] == player1) {
+                std::cout << "PLAYER 1 (X) WINS!\n";
             } else {
-                std::cout << "YOU LOSE!\n";
+                std::cout << "PLAYER 2 (O) WINS!\n";
             }
             return true;
         }
     }
-
     return false;
 }
